@@ -2,7 +2,7 @@ class User < Player
   attr_reader :cash
 
   def what_first_two
-    players_two
+    @interface.players_two
   end
 
   def what_one_more

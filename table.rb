@@ -7,7 +7,7 @@ class Table
   end
 
   def start_game
-    who_are_you
+    @interface.who_are_you
     @game.continue_game
   end
 end

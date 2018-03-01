@@ -2,7 +2,7 @@ class Player
   attr_accessor :cash, :hand
 
   include Deck
-  include Interface
+  #include Interface
 
   def initialize
     @hand = []
@@ -11,7 +11,7 @@ class Player
 
   def first_two_cards
     take_two
-    what_first_two
+    #what_first_two
     calculate
     @hand[0] = @first_card
     @hand[1] = @second_card

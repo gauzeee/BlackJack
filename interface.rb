@@ -1,5 +1,9 @@
-module Interface
+class Interface
   attr_reader :menu
+
+  def initialize#(interface)
+    #@interface = interface
+  end
 
   TO_DO_POINTS = [
     'Enter 1, to PASS', 'Enter 2, to get ONE more card',

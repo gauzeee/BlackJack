@@ -1,13 +1,19 @@
 class Game
-  include Interface
+  #include Interface
 
   attr_reader :user, :dealer
   attr_accessor :bank
 
-  def initialize
+  def initialize(interface)
+    @interface = interface
     @user = User.new
     @dealer = Dealer.new
     @bank = 0
+  end
+
+  def start_game
+    @interface.who_are_you
+    continue_game
   end
 
   def go_game
@@ -56,7 +62,7 @@ class Game
   end
 
   def choose_next
-    menu
+    @interface.menu
     loop do
       choice = gets.chomp
       send TO_DO[choice]
