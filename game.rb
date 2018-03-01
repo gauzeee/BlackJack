@@ -1,56 +1,48 @@
-module Game
-  TO_DO_POINTS = [
-    'Enter 1, to PASS', 'Enter 2, to get ONE more card',
-    'Enter 3, to OPEN cards'
-  ].freeze
+class Game
+  include Interface
 
-  TO_DO = { '1' => :pass, '2' => :one_more, '3' => :open_cards }.freeze
+  attr_reader :user, :dealer
+  attr_accessor :bank
+
+  def initialize
+    @user = User.new
+    @dealer = Dealer.new
+    @bank = 0
+  end
 
   def go_game
     @user.first_two_cards
     @dealer.first_two_cards
   end
 
+  def continue_game
+    go_game
+    @bank += 20
+    choose_next
+  end
+
   def pass
     @dealer.dealer_plays
   end
 
-  def one_more
+  def one_more_card
     @user.one_more
   end
 
-  def open_cards
-    puts "#{@user.player_name}, now you have"
-    puts "#{@user.cards_on_hand}"
-    puts "Summury #{@user.final_sum} points!"
-    puts "Dealer have"
-    puts "#{@dealer.cards_on_hand}"
-    puts "Summary #{@dealer.final_sum} points!"
-    winner
-  end
-
-  def user_wins
-    puts "#{@user.player_name} - WINNER!"
+  def user_wins_cash
     @user.cash += @bank
     @bank -= 20
-    puts "You got now #{@user.cash} $"
-    again
   end
 
-  def user_lose
-    puts 'Sorry! You lose.'
+  def user_lose_cash
     @dealer.cash += @bank
     @bank -= 20
-    puts "You got now #{@user.cash} $"
-    again
   end
 
-  def all_lose
-    puts 'No winner there =)'
+  def all_lose_cash
     @bank -= 20
     @user.cash += 10
     @dealer.cash += 10
-    again
   end
 
   def winner
@@ -61,11 +53,6 @@ module Game
     else
       all_lose
     end
-  end
-
-  def menu
-    puts "You now have two cards with #{@user.start_sum} points"
-    TO_DO_POINTS.each { |point| puts point }
   end
 
   def choose_next
@@ -80,11 +67,8 @@ module Game
   def again
     @user.hand[2] = 0
     @dealer.hand[2] = 0
-    puts 'Do you want play again?'
-    puts 'Y - Yes, N - No'
-    again_choice = gets.chomp
-    again_choice.capitalize!
-    continue_game if again_choice == 'Y' && @user.cash > 0
-    exit if again_choice == 'N'
+    play_again
+    continue_game if @again_choice == 'Y' && @user.cash > 0
+    exit if @again_choice == 'N'
   end
 end

@@ -1,14 +1,12 @@
 class Dealer < Player
   attr_reader :cash
 
-  def what_first_two_cards
-    puts 'Dealer cards'
-    puts '*'
-    puts '*'
+  def what_first_two
+    dealers_two
   end
 
   def what_one_more
-    puts 'Dealer got one more card'
+    dealers_one_more
   end
 
   def dealer_plays
