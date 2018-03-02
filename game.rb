@@ -52,7 +52,6 @@ class Game
     player.hand[2] = player.deck.third_card
     player.hand[0] = 1 if player.hand[0] == 11 && final_sum(player) > 21
     player.hand[1] = 1 if player.hand[1] == 11 && final_sum(player) > 21
-    final_sum(player)
   end
 
   def final_sum(player)
@@ -81,7 +80,6 @@ class Game
 
   def pass
     dealer_plays(@dealer)
-    open_cards
   end
 
   def dealer_plays(dealer)
