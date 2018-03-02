@@ -18,19 +18,19 @@ module Winner
   end
 
   def dealer_wins?
-    final_sum(@dealer) <= 21 && final_sum(@dealer) > final_sum(@user)
+    @dealer.points <= 21 && @dealer.points > @user.points
   end
 
   def dealer_lose?
-    final_sum(@user) <= 21 && final_sum(@user) > final_sum(@dealer)
+    @user.points <= 21 && @user.points > @dealer.points
   end
 
   def user_lose?
-    final_sum(@user) > 21 || dealer_wins?
+    @user.points > 21 || dealer_wins?
   end
 
   def user_wins?
-    final_sum(@dealer) > 21 || dealer_lose?
+    @dealer.points > 21 || dealer_lose?
   end
 
   def who_is_winner

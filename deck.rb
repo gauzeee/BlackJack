@@ -1,43 +1,30 @@
 class Deck
-  attr_reader :first_card, :second_card, :card3
-  attr_accessor :third_card
-
-  include CardsCalc
+  #include CardsCalc
 
   SUITS = ['♡', '♢', '♤', '♧'].freeze
-  CARDS = %w[2 3 4 5 6 7 8 9 A J Q K].freeze
+  NAMES = %w[2 3 4 5 6 7 8 9 A J Q K].freeze
+  VALUES = [ 2, 3, 4, 5, 6, 7, 8, 9, 1, 10, 10, 10 ].freeze
 
-  def take_two
-    @card1 = [CARDS.sample, SUITS.sample]
-    @card2 = [CARDS.sample, SUITS.sample]
+  attr_accessor :cards
+
+  def initialize
+    @cards = []
+    create_deck
   end
 
-  def take_third
-    @card3 = [CARDS.sample, SUITS.sample]
-    calculate_card3
+  def shuffle!
+    @cards.shuffle!
   end
 
-  def show_card1
-    @card1[0] + @card1[1]
+  def create_deck
+    SUITS.each do |suit|
+      NAMES.each_with_index do |name, index|
+        @cards << Card.new(name, suit, VALUES[index])
+      end
+    end
   end
 
-  def show_card2
-    @card2[0] + @card2[1]
-  end
-
-  def show_card3
-    @card3[0] + @card3[1] unless @card3.nil?
-  end
-
-  def write_cards(player)
-    c1 = @card1[0] + @card1[1]
-    player.cards[0] = c1
-    c2 = @card2[0] + @card2[1]
-    player.cards[1] = c2
-  end
-
-  def write_third(player)
-    c3 = @card3[0] + @card3[1]
-    player.cards[2] = c3
+  def show_deck
+    @cards.each { |name| puts "#{name.name} #{name.suit} #{name.value}" }
   end
 end
