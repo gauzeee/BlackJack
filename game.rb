@@ -1,8 +1,10 @@
 class Game
-  #include Interface
-
   attr_reader :user, :dealer
   attr_accessor :bank
+
+  include Winner
+
+  TO_DO = { 'P' => :pass, 'M' => :one_more_card, 'O' => :open_cards }.freeze
 
   def initialize(interface)
     @interface = interface
@@ -29,6 +31,7 @@ class Game
 
   def pass
     @dealer.dealer_plays
+    open_cards
   end
 
   def one_more_card
@@ -52,29 +55,26 @@ class Game
   end
 
   def winner
-    if @user.final_sum > 21 || @dealer.final_sum > @user.final_sum
-      user_lose
-    elsif @dealer.final_sum > 21 || @user.final_sum > @dealer.final_sum
-      user_wins
-    else
-      all_lose
-    end
+    who_is_winner
+  end
+
+  def open_cards
+    @interface.open_cards(@user, @dealer)
+    winner
   end
 
   def choose_next
-    @interface.menu
+    @interface.menu(@user.start_sum, @dealer.start_sum)
     loop do
-      choice = gets.chomp
-      send TO_DO[choice]
+      send TO_DO[@interface.menu_choice]
       open_cards if @user.hand.size >= 3 || @dealer.hand.size >= 3
     end
   end
 
   def again
-    @user.hand[2] = 0
-    @dealer.hand[2] = 0
-    play_again
-    continue_game if @again_choice == 'Y' && @user.cash > 0
-    exit if @again_choice == 'N'
+    @user.hand.delete(@user.hand[2])
+    @dealer.hand.delete(@dealer.hand[2])
+    @interface.play_again(@user)
+    continue_game if @interface.next_game == true
   end
 end

@@ -2,11 +2,13 @@ class Dealer < Player
   attr_reader :cash
 
   def what_first_two
-    @interface.dealers_two
+    puts 'Dealer cards'
+    puts '*'
+    puts '*'
   end
 
   def what_one_more
-    @interface.dealers_one_more
+    puts 'Dealer take one more card'
   end
 
   def dealer_plays

@@ -1,5 +1,4 @@
 class Table
-
   include Interface
 
   def initialize(game)
@@ -11,4 +10,3 @@ class Table
     @game.continue_game
   end
 end
-
