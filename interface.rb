@@ -23,24 +23,22 @@ class Interface
     @choice.capitalize!
   end
 
-  def open_cards(user, dealer)
+  def open_cards(user, dealer, fsum_user, fsum_dealer)
     puts "#{@player_name}, now you have"
     hand(user)
-    puts "Summury #{user.final_sum} points!"
+    puts "Summury #{fsum_user} points!"
     puts 'Dealer have'
     hand(dealer)
-    puts "Summary #{dealer.final_sum} points!"
+    puts "Summary #{fsum_dealer} points!"
   end
 
   def hand(name)
-    puts name.deck.show_card1
-    puts name.deck.show_card2
-    puts name.deck.show_card3
+    name.cards.each { |card| puts card }
   end
 
-  def users_two(deck)
+  def users_two(player)
     puts 'Your cards'
-    puts deck.show_card1, deck.show_card2
+    puts player.deck.show_card1, player.deck.show_card2
   end
 
   def dealers_two
@@ -49,8 +47,8 @@ class Interface
     puts '*'
   end
 
-  def users_one_more(deck)
-    puts "Now you have #{deck.card3[0].to_s + deck.card3[1].to_s}"
+  def users_one_more(user)
+    puts "Now you have #{user.deck.card3[0].to_s + user.deck.card3[1].to_s}"
   end
 
   def dealers_one_more
