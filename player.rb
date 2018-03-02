@@ -1,28 +1,28 @@
 class Player
   attr_accessor :cash, :hand
 
-  include Deck
-
-  def initialize
+  def initialize(deck)
+    @deck = deck
     @hand = []
     @cash = 100
   end
 
-  def first_two_cards
-    take_two
-    what_first_two
-    calculate
-    @hand[0] = @first_card
-    @hand[1] = @second_card
+  def first_two_cards(interface)
+    @deck.take_two
+    what_first_two(interface, @deck)
+    @deck.calculate
+    @hand[0] = @deck.first_card
+    @hand[1] = @deck.second_card
+    @hand[2] = @deck.third_card
     @cash -= 10
   end
 
-  def one_more
-    take_third
-    what_one_more
-    @third_card = 11 if @card3[0] == 'A' && start_sum + 11 < 21
-    @third_card = 1 if @card3[0] == 'A' && start_sum + 11 > 21
-    @hand[2] = @third_card
+  def one_more(interface)
+    @deck.take_third
+    what_one_more(interface, @deck)
+    @deck.third_card = 11 if @deck.card3[0] == 'A' && start_sum + 11 < 21
+    @deck.third_card = 1 if @deck.card3[0] == 'A' && start_sum + 11 > 21
+    @hand[2] = @deck.third_card
     @hand[0] = 1 if @hand[0] == 11 && final_sum > 21
     @hand[1] = 1 if @hand[1] == 11 && final_sum > 21
     final_sum
@@ -30,11 +30,6 @@ class Player
 
   def final_sum
     @hand[0].to_i + @hand[1].to_i + @hand[2].to_i
-  end
-
-  def cards_on_hand
-    show_two
-    @card3[0] + @card3[1] unless @card3.nil? || @hand[2].nil?
   end
 
   def start_sum

@@ -8,8 +8,10 @@ class Game
 
   def initialize(interface)
     @interface = interface
-    @user = User.new
-    @dealer = Dealer.new
+    @user_deck = Deck.new
+    @dealer_deck = Deck.new
+    @user = User.new(@user_deck)
+    @dealer = Dealer.new(@dealer_deck)
     @bank = 0
   end
 
@@ -19,8 +21,8 @@ class Game
   end
 
   def go_game
-    @user.first_two_cards
-    @dealer.first_two_cards
+    @user.first_two_cards(@interface)
+    @dealer.first_two_cards(@interface)
   end
 
   def continue_game
@@ -30,12 +32,12 @@ class Game
   end
 
   def pass
-    @dealer.dealer_plays
+    @dealer.dealer_plays(@interface)
     open_cards
   end
 
   def one_more_card
-    @user.one_more
+    @user.one_more(@interface)
   end
 
   def user_wins_cash
@@ -64,7 +66,7 @@ class Game
   end
 
   def choose_next
-    @interface.menu(@user.start_sum, @dealer.start_sum)
+    @interface.menu(@user.start_sum)
     loop do
       send TO_DO[@interface.menu_choice]
       open_cards if @user.hand.size >= 3 || @dealer.hand.size >= 3

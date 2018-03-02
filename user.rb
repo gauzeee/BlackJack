@@ -1,12 +1,11 @@
 class User < Player
-  attr_reader :cash
+  attr_reader :cash, :deck
 
-  def what_first_two
-    puts 'Your cards'
-    show_two
+  def what_first_two(interface, deck)
+    interface.users_two(deck)
   end
 
-  def what_one_more
-    puts "Now you have #{@card3[0].to_s + @card3[1].to_s}"
+  def what_one_more(interface, deck)
+    interface.users_one_more(deck)
   end
 end
