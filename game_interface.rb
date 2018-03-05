@@ -1,4 +1,4 @@
-class Interface
+class GameInterface
   attr_reader :next_game
 
   TO_DO_POINTS = [
@@ -11,6 +11,11 @@ class Interface
     TO_DO_POINTS.each { |point| puts point }
   end
 
+  def menu_choice
+    @choice = gets.chomp
+    @choice.capitalize!
+  end
+
   def who_are_you
     puts 'Welcome to Black Jack Table!'
     puts 'What is your name, friend?'
@@ -18,9 +23,9 @@ class Interface
     puts "Let`s play Black Jack, #{@player_name}!"
   end
 
-  def menu_choice
-    @choice = gets.chomp
-    @choice.capitalize!
+  def dealer_plays(player)
+    return if player.points > 17
+    one_more(player) if player.points < 17
   end
 
   def open_cards(user, dealer)
@@ -34,39 +39,6 @@ class Interface
 
   def hand(name)
     name.hand.each { |card| puts "#{card.name} #{card.suit}" }
-  end
-
-  def users_two(usr)
-    puts 'Your cards'
-    puts usr.hand[0].name + usr.hand[0].suit , usr.hand[1].name + usr.hand[1].suit
-  end
-
-  def dealers_two
-    puts 'Dealer cards'
-    puts '*'
-    puts '*'
-  end
-
-  def users_one_more(user)
-    puts "Now you have #{user.hand[2].name + user.hand[2].suit}"
-  end
-
-  def dealers_one_more
-    puts 'Dealer take one more card'
-  end
-
-  def user_wins(user)
-    puts "#{@player_name} - WINNER!"
-    puts "You got now #{user.cash} $"
-  end
-
-  def user_lose(user)
-    puts 'Sorry! You lose.'
-    puts "You got now #{user.cash} $"
-  end
-
-  def all_lose
-    puts 'No winner there =)'
   end
 
   def play_again(user)
