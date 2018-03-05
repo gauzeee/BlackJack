@@ -9,8 +9,8 @@ class Game
   def initialize(interface)
     @interface = interface
     @deck = Deck.new
-    @user = Player.new(@deck)
-    @dealer = Player.new(@deck)
+    @user = Player.new
+    @dealer = Player.new
     @bank = 0
   end
 
@@ -20,23 +20,25 @@ class Game
 
   def take_card(player)
     player.hand << @deck.cards[0]
-    @deck.cards.delete_at(0)
+    @deck.cards.slice!(0)
   end
 
   def calculate_two(player)
+    player.hand[0].value = 11 if player.hand[0].name == 'A' && player.hand[1].name != 'A'
     card1 = player.hand[0].value
-    card1 = 11 if player.hand[0].name == 'A' && player.hand[1].name != 'A'
+    player.hand[1].value = 11 if player.hand[1].name == 'A'
+    player.hand[1].value = 1 if player.hand[1].name == 'A' && card1 == 11
     card2 = player.hand[1].value
-    card2 = 11 if player.hand[1].name == 'A'
-    card2 = 1 if player.hand[1].name == 'A' && card1 == 11
     player.points = card1 + card2
   end
 
   def calculate_three(player)
-    @card3 = player.hand[2].value
-    @card3 = 11 if ace11?(player)
-    @card3 = 1 if ace1?(player)
-    player.points += @card3
+    card3 = player.hand[2].value
+    card3 = 11 if ace11?(player)
+    card3 = 1 if ace1?(player)
+    player.points += card3
+    player.points -= 10 if player.hand[0].value == 11 && player.points > 21
+    player.points -= 10 if player.hand[1].value == 11 && player.points > 21
   end
 
   def first_two_cards(player)
@@ -58,26 +60,22 @@ class Game
   end
 
   def ace11?(player)
-    player.hand[2].name == 'A' && @start_sum + 11 < 21
+    player.hand[2].name == 'A' && player.points + 11 < 21
   end
 
   def ace1?(player)
-    player.hand[2].name == 'A' && @start_sum + 11 > 21
+    player.hand[2].name == 'A' && player.points + 11 > 21
   end
 
   def one_more(player)
     take_card(player)
     what_one_more(player)
     calculate_three(player)
-    player.hand[2].value = @card3
-    player.hand[0].value = 1 if player.hand[0].value == 11 && @final_sum > 21
-    player.hand[1].value = 1 if player.hand[1].value == 11 && @final_sum > 21
   end
 
   def start_game
     @interface.who_are_you
-    @deck.create_deck
-    @deck.shuffle!
+    @deck.mix_deck
     continue_game
   end
 
@@ -96,9 +94,9 @@ class Game
     dealer_plays(@dealer)
   end
 
-  def dealer_plays(dealer)
-    return if start_sum(@dealer) > 17
-    one_more(dealer) if start_sum(@dealer) < 17
+  def dealer_plays(player)
+    return if player.points > 17
+    one_more(player) if player.points < 17
   end
 
   def one_more_card
@@ -138,14 +136,16 @@ class Game
     end
   end
 
+  def slice_hand(player)
+    3.times { | i | player.hand.slice!(0) }
+  end
+
   def clear(player)
     @deck.cards << player.hand[0]
-    player.hand.slice!(0)
     @deck.cards << player.hand[1]
-    player.hand.slice!(1)
     @deck.cards << player.hand[2] unless player.hand[2].nil?
-    player.hand.slice!(2)
-    player.points = 0
+    slice_hand(player)
+    @deck.mix_deck
   end
 
   def again
