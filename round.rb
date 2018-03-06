@@ -21,6 +21,12 @@ class Round
     choose_next
   end
 
+  def clear(player)
+    slice_hand(player)
+  end
+
+  private
+
   def choose_next
     @interface.menu(@user.points)
     send TO_DO[@interface.menu_choice]
@@ -54,10 +60,6 @@ class Round
     take_card(player)
     what_one_more(player)
     calculate_three(player)
-  end
-
-  def clear(player)
-    slice_hand(player)
   end
 
   def dealer_plays(player)
