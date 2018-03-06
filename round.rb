@@ -2,24 +2,48 @@ class Round
   include Winner
   include CardCalc
 
-  def initialize(user, dealer, deck, bank)
+  TO_DO = { 'P' => :pass, 'M' => :one_more_card, 'O' => :open_cards }.freeze
+
+  def initialize(user, dealer, bank, player_name)
     @user = user
     @dealer = dealer
-    @deck = deck
+    @deck = Deck.new
     @bank = bank
+    @player_name = player_name
     @interface = RoundInterface.new
   end
 
   def begin_round
+    @deck.mix_deck
     first_two_cards(@user)
     first_two_cards(@dealer)
     @bank += 20
+    choose_next
   end
 
-  def winner
-    if user_lose?
+  def choose_next
+    @interface.menu(@user.points)
+    send TO_DO[@interface.menu_choice]
+    open_cards if @user.hand.size >= 3 || @dealer.hand.size >= 3
+  end
+
+  def open_cards
+    @interface.open_cards(@user, @dealer, @player_name)
+    winner(@user, @dealer)
+  end
+
+  def one_more_card
+    one_more(@user)
+  end
+
+  def pass
+    dealer_plays(@dealer)
+  end
+
+  def winner(user, dealer)
+    if user_lose?(user, dealer)
       user_looser
-    elsif user_wins?
+    elsif user_wins?(user, dealer)
       user_winner
     else
       all_loosers
@@ -33,16 +57,13 @@ class Round
   end
 
   def clear(player)
-    @deck.cards << player.hand[0]
-    @deck.cards << player.hand[1]
-    @deck.cards << player.hand[2] unless player.hand[2].nil?
     slice_hand(player)
-    @deck.mix_deck
   end
 
   def dealer_plays(player)
     return if player.points > 17
     one_more(player) if player.points < 17
+    open_cards
   end
 
   private
@@ -86,7 +107,7 @@ class Round
 
   def user_winner
     user_wins_cash
-    @interface.user_wins(@user)
+    @interface.user_wins(@user, @player_name)
   end
 
   def user_looser
