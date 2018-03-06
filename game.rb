@@ -15,6 +15,7 @@ class Game
     @interface.who_are_you
     @player_name = @interface.player_name
     begin_round
+    again
   end
 
   private
@@ -22,7 +23,6 @@ class Game
   def begin_round
     @round = Round.new(@user, @dealer, @bank, @player_name)
     @round.begin_round
-    again
   end
 
   def again
