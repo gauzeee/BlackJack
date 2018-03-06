@@ -73,8 +73,6 @@ class Round
     open_cards
   end
 
-  private
-
   def take_card(player)
     player.hand << @deck.cards[0]
     @deck.cards.slice!(0)
