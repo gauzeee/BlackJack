@@ -12,7 +12,7 @@ class RoundInterface
 
   def menu_choice
     @choice = gets.chomp
-    @choice.capitalize!
+    @choice.capitalize
   end
 
   def dealer_plays(player)

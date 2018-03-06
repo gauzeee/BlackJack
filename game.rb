@@ -14,11 +14,15 @@ class Game
   def start_game
     @interface.who_are_you
     @player_name = @interface.player_name
-    begin_round
-    again
+    continue_game
   end
 
   private
+
+  def continue_game
+    begin_round
+    again
+  end
 
   def begin_round
     @round = Round.new(@user, @dealer, @bank, @player_name)
@@ -30,7 +34,7 @@ class Game
     @round.clear(@dealer)
     @interface.play_again(@user)
     if @user.cash > 0
-      begin_round if @interface.next_game == true
+      continue_game if @interface.next_game == true
     else
       @interface.no_money
     end

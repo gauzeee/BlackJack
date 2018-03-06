@@ -12,9 +12,8 @@ class GameInterface
     puts 'Do you want play again?'
     puts 'Y - Yes, N - No'
     @again_choice = gets.chomp
-    @again_choice.capitalize!
-    @next_game = true if @again_choice == 'Y'
-    exit if @again_choice == 'N'
+    @next_game = true if @again_choice == 'Y' || @again_choice == 'y'
+    exit if @again_choice == 'N' || @again_choice == 'n'
   end
 
   def no_money
