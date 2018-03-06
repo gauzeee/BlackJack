@@ -129,6 +129,6 @@ class Round
   end
 
   def slice_hand(player)
-    3.times { | i | player.hand.slice!(0) }
+    player.hand = []
   end
 end
