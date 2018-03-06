@@ -44,6 +44,10 @@ class RoundInterface
     puts '*'
   end
 
+  def error
+    puts "Wrong answer! Choose again"
+  end
+
   def users_one_more(user)
     puts "Now you have #{user.hand[2].name + user.hand[2].suit}"
   end

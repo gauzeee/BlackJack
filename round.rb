@@ -29,7 +29,13 @@ class Round
 
   def choose_next
     @interface.menu(@user.points)
-    send TO_DO[@interface.menu_choice]
+    answer = @interface.menu_choice
+    unless TO_DO[answer].nil?
+      send TO_DO[answer]
+    else
+      @interface.error
+      choose_next
+    end
     open_cards if @user.hand.size >= 3 || @dealer.hand.size >= 3
   end
 
@@ -63,7 +69,6 @@ class Round
   end
 
   def dealer_plays(player)
-    return if player.points > 17
     one_more(player) if player.points < 17
     open_cards
   end

@@ -29,14 +29,31 @@ class Game
     @round.begin_round
   end
 
+  def continue?
+    @interface.again_choice == 'Y' || @interface.again_choice == 'y'
+  end
+
+  def exit?
+    @interface.again_choice == 'N' || @interface.again_choice == 'n'
+  end
+
+  def to_do
+    if @user.cash > 0 && continue?
+      continue_game
+    elsif @user.cash < 0
+      @interface.no_money
+    elsif exit?
+      exit
+    else
+      @interface.error
+      again
+    end
+  end
+
   def again
     @round.clear(@user)
     @round.clear(@dealer)
     @interface.play_again(@user)
-    if @user.cash > 0
-      continue_game if @interface.next_game == true
-    else
-      @interface.no_money
-    end
+    to_do
   end
 end
